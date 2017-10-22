@@ -18,6 +18,18 @@ consumes:
 produces:
   - application/json
 paths:
+  /status:
+    x-swagger-router-controller: status
+    get:
+      description: Returns the current status of the API
+      operationId: getStatus
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Status"
+        "404":
+          description: Not Found
   /notes:
     # binds a127 app logic to a route
     x-swagger-router-controller: notes
@@ -83,12 +95,20 @@ definitions:
     properties:
       id:
         type: string
+        minLength: 32
+        maxLength: 32
       owner:
         type: string
+        minLength: 1
+        maxLength: 100
       category:
         type: string
+        minLength: 1
+        maxLength: 100
       title: 
         type: string
+        minLength: 1
+        maxLength: 100
       body:
         $ref: "#/definitions/NoteBody"
       creationDate:
@@ -97,13 +117,31 @@ definitions:
       modifiedDate:
         type: string
         format: date-time
+    required:
+      - id
+      - owner
+      - category
+      - title
+      - creationDate
   NoteBody:
     type: object
     properties:
       text:
         type: string
+        minLength: 1
+        maxLength: 1000
       imageId:
         type: string
+        minLength: 32
+        maxLength: 32
+  Status:
+    type: object
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+        enum: [OK, ERROR, DOWN]
   ErrorResponse:
     required:
       - message
