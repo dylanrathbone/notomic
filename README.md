@@ -1,0 +1,2 @@
+# notomic
+Atomic notes
