@@ -1,2 +1,1 @@
-# notomic
-Atomic notes
+# Skeleton project for Swagger
