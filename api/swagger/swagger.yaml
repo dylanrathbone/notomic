@@ -25,7 +25,7 @@ paths:
       operationId: getStatus
       responses:
         "200":
-          description: Success
+          description: Status returned successfully
           schema:
             $ref: "#/definitions/Status"
         "404":
@@ -39,7 +39,7 @@ paths:
       operationId: getNotes
       responses:
         "200":
-          description: Success
+          description: Notes returned successfully
           schema:
             $ref: "#/definitions/Notes"
         "401":
@@ -60,13 +60,13 @@ paths:
       parameters:
         - name: note
           in: body
-          description: Note to be added
+          description: Note to be created
           required: true
           schema:
             $ref: '#/definitions/Note'
       responses:
         "201":
-          description: Success
+          description: Note created successfully
         "401":
           description: Unauthorized
         "404":
@@ -82,6 +82,65 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /notes/{noteId}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: notes
+    get:
+      description: Returns a note based on it's ID
+      # used as the method name of the controller
+      operationId: getNote
+      parameters:
+        - name: noteId
+          in: path
+          description: ID of note to fetch
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Note returned successfully
+          schema:
+            $ref: "#/definitions/Note"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+        "503":
+          description: Service Unavailable
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    patch:
+      description: Updates a notes body detail based on its ID 
+      # used as the method name of the controller
+      operationId: updateNote
+      parameters:
+        - name: noteId
+          in: path
+          description: ID of note to fetch
+          required: true
+          type: string
+      responses:
+        "204":
+          description: Note updated successfully
+          schema:
+            $ref: "#/definitions/NotePatch"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+        "503":
+          description: Service Unavailable
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"  
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -126,6 +185,25 @@ definitions:
   NoteBody:
     type: object
     properties:
+      text:
+        type: string
+        minLength: 1
+        maxLength: 1000
+      imageId:
+        type: string
+        minLength: 32
+        maxLength: 32
+  NotePatch:
+    type: object
+    properties:
+      category:
+        type: string
+        minLength: 1
+        maxLength: 100
+      title: 
+        type: string
+        minLength: 1
+        maxLength: 100
       text:
         type: string
         minLength: 1
